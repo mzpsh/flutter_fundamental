@@ -54,7 +54,7 @@ class RestaurantTab extends StatelessWidget {
     return Stack(
       children: [
         Ink(
-          height: 160,
+          height: 196,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Color(0xFFf3bc58), Color(0xFFf6a546)],
@@ -63,12 +63,14 @@ class RestaurantTab extends StatelessWidget {
             ),
           ),
         ),
-        FutureBuilder(
-          future: Restaurant.getLocalRestaurants(
-              'assets/jsons/local_restaurants.json'),
-          builder: (context, snapshot) {
-            return RestaurantList(snapshot: snapshot);
-          },
+        SafeArea(
+          child: FutureBuilder(
+            future: Restaurant.getLocalRestaurants(
+                'assets/jsons/local_restaurants.json'),
+            builder: (context, snapshot) {
+              return RestaurantList(snapshot: snapshot);
+            },
+          ),
         )
       ],
     );

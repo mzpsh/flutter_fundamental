@@ -278,20 +278,24 @@ class MenuChips extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 6, 0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFFf9dfbc),
-          borderRadius: BorderRadius.circular(90),
-          border: Border.all(color: const Color(0xfff0942b), width: 2),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            chipText.toUpperCase(),
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: const Color(0xFF001000),
-                  fontSize: 12,
-                ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(90),
+        onTap: () {},
+        child: Ink(
+          decoration: BoxDecoration(
+            color: const Color(0xFFf9dfbc),
+            borderRadius: BorderRadius.circular(90),
+            border: Border.all(color: Color.fromARGB(255, 10, 9, 7), width: 2),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              chipText.toUpperCase(),
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: const Color(0xFF001000),
+                    fontSize: 12,
+                  ),
+            ),
           ),
         ),
       ),
@@ -309,17 +313,19 @@ class BackButton extends StatelessWidget {
     return Positioned(
       top: 12,
       left: 12,
-      child: GestureDetector(
-        onTap: () => Navigator.pop(context),
-        child: Container(
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(32)),
-              color: Color(0x80000000)),
-          child: const Padding(
-            padding: EdgeInsets.all(6.0),
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
+      child: SafeArea(
+        child: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Container(
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(32)),
+                color: Color(0x80000000)),
+            child: const Padding(
+              padding: EdgeInsets.all(6.0),
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
