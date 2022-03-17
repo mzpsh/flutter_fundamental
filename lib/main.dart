@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_fundamental/controllers/favorites.dart';
+import 'package:get/get.dart';
 import 'package:flutter_fundamental/routes/detail.dart';
 import 'package:flutter_fundamental/routes/home.dart';
 import 'package:flutter_fundamental/routes/search.dart';
@@ -12,6 +15,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(FavoriteRestaurants());
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        statusBarColor: Color.fromARGB(92, 0, 0, 0),
+      ),
+    );
     return MaterialApp(
       routes: {
         '/': (context) => const Home(),
@@ -19,6 +29,8 @@ class App extends StatelessWidget {
         'detail': (context) => const Detail(),
       },
       theme: ThemeData(
+        // This doesn't seems to work very well
+        // need to study material's theming
         colorScheme: const ColorScheme(
             brightness: Brightness.light,
             primary: Color(0xFF062006),
@@ -32,10 +44,11 @@ class App extends StatelessWidget {
             surface: Color(0xFF062006),
             onSurface: Color(0xFF062006)),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            backgroundColor: Color(0xFFf3bc58),
-            selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-            elevation: 16,
-            selectedItemColor: Color(0xFF062006)),
+          backgroundColor: Color(0xFFf3bc58),
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+          elevation: 16,
+          selectedItemColor: Color(0xFF062006),
+        ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFFf3bc58),
         ),

@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fundamental/controllers/favorites.dart';
 import 'package:flutter_fundamental/models/restaurant.dart';
-
+import 'package:flutter_fundamental/widgets/detail_background_gradient.dart';
+import 'package:flutter_fundamental/widgets/detail_background_image.dart';
+import 'package:flutter_fundamental/widgets/detail_description.dart';
+import 'package:flutter_fundamental/widgets/detail_menu_mini_card.dart';
+import 'package:flutter_fundamental/widgets/detail_titles.dart';
+import 'package:flutter_fundamental/widgets/floating_back_button.dart';
+import 'package:flutter_fundamental/widgets/reviews.dart';
+import 'package:flutter_fundamental/widgets/skeleton.dart';
+import 'package:get/get.dart';
 import '../widgets/more_restaurant_list.dart';
 
 class Detail extends StatefulWidget {
@@ -11,325 +20,261 @@ class Detail extends StatefulWidget {
 }
 
 class _DetailState extends State<Detail> {
-  bool _isDescriptionOpen = false;
-
-  List<Widget> _renderMenuChips(Restaurant restaurant, String menuType) {
-    List<Widget> foodsDrinks = [];
-
-    var foods = restaurant.menus['foods'];
-    var drinks = restaurant.menus['drinks'];
-
-    if (menuType == 'food') {
-      for (Map food in foods) {
-        foodsDrinks.add(MenuChips(
-          chipText: food['name'],
-        ));
-      }
-    }
-
-    if (menuType == 'drink') {
-      for (Map drink in drinks) {
-        foodsDrinks.add(MenuChips(
-          chipText: drink['name'],
-        ));
-      }
-    }
-
-    return foodsDrinks;
-  }
-
+  final FavoriteRestaurants c = Get.find();
   @override
   Widget build(BuildContext context) {
-    final Map _arguments = ModalRoute.of(context)?.settings.arguments as Map;
-    final _index = _arguments['index'];
-    final _restaurant = _arguments['restaurant'] as Restaurant;
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFFf3bc58),
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Favorite'),
-                  content: const Text('Not implemented yet.'),
-                  actions: [
-                    TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('OK'))
-                  ],
-                );
-              });
-        },
-        child: const Icon(Icons.favorite),
-      ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    final pictureId = arguments['pictureId'];
+    final restaurantId = arguments['restaurantId'];
+
+    return FutureBuilder(
+      future: Restaurant.getRestaurantDetailFromAPI(restaurantId),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Stack(
               children: [
-                Hero(
-                  tag: 'image$_index',
-                  child: Material(
-                    child: Stack(
-                      children: [
-                        Ink(
-                          height: 224,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(16),
-                                bottomRight: Radius.circular(16)),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(_restaurant.pictureId),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 224,
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(16),
-                                bottomRight: Radius.circular(16),
-                              ),
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Color.fromARGB(0, 0, 0, 0),
-                                  Color.fromARGB(0, 0, 0, 0),
-                                  Color.fromARGB(169, 0, 0, 0)
-                                ],
-                              )),
-                        ),
-                        Positioned(
-                          bottom: 24,
-                          left: 24,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _restaurant.name,
-                                overflow: TextOverflow.fade,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    _restaurant.city,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1
-                                        ?.copyWith(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(
-                                    width: 12,
-                                  ),
-                                  const Icon(
-                                    Icons.star,
-                                    color: Colors.red,
-                                    size: 16,
-                                  ),
-                                  Text(
-                                    _restaurant.rating.toString(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontSize: 12),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                const FloatingBackButton(),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Text(
+                      'Error has occured. Check your connection.',
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-                  child: Text(
-                    'FOODS AND DRINKS',
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                          color: const Color(0xFF062006),
-                        ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 24,
-                      ),
-                      ..._renderMenuChips(_restaurant, 'drink')
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 6),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 24,
-                      ),
-                      ..._renderMenuChips(_restaurant, 'food')
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _isDescriptionOpen = !_isDescriptionOpen;
-                    });
-                  },
-                  child: Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 12, 18, 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'WORDS AND SENTENCES',
-                            style:
-                                Theme.of(context).textTheme.subtitle2?.copyWith(
-                                      color: const Color(0xFF062006),
-                                    ),
-                          ),
-                          Icon(_isDescriptionOpen
-                              ? Icons.expand_less
-                              : Icons.expand_more)
-                        ],
-                      )),
-                ),
-                (_isDescriptionOpen
-                    ? Padding(
-                        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-                        child: Text(
-                          '    ' + _restaurant.description,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    height: 1.5,
-                                    color: const Color(0xFF001000),
-                                  ),
-                        ),
-                      )
-                    : const SizedBox.shrink()),
-                const SizedBox(
-                  height: 12,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-                  child: Text(
-                    'MORE RESTAURANTS',
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                          color: const Color(0xFF062006),
-                        ),
-                  ),
-                ),
-                FutureBuilder(
-                  future: Restaurant.getLocalRestaurants(
-                      'assets/jsons/local_restaurants.json'),
-                  builder: (context, snapshot) {
-                    return MoreRestaurantList(
-                        snapshot: snapshot, currentRestaurant: _restaurant);
-                  },
-                )
               ],
             ),
-          ),
-          const BackButton(),
-        ],
-      ),
-    );
-  }
-}
-
-class MenuChips extends StatelessWidget {
-  final String chipText;
-
-  const MenuChips({
-    required this.chipText,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 6, 0),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(90),
-        onTap: () {},
-        child: Ink(
-          decoration: BoxDecoration(
-            color: const Color(0xFFf9dfbc),
-            borderRadius: BorderRadius.circular(90),
-            border: Border.all(color: Color.fromARGB(255, 10, 9, 7), width: 2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              chipText.toUpperCase(),
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: const Color(0xFF001000),
-                    fontSize: 12,
-                  ),
+          );
+        } else if (snapshot.hasData) {
+          final restaurant = snapshot.data as Restaurant;
+          return Scaffold(
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: const Color(0xFFf3bc58),
+              onPressed: () {
+                final message = c.toggleRestaurantToFavorite(restaurant);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(message),
+                  duration: const Duration(seconds: 1),
+                ));
+              },
+              child: Obx(() {
+                if (!c.checkIfRestaurantHasBeenFavorited(restaurant)) {
+                  return const Icon(Icons.favorite_border);
+                }
+                return const Icon(Icons.favorite);
+              }),
             ),
-          ),
-        ),
-      ),
+            body: DetailContent(restaurant: snapshot.data as Restaurant),
+          );
+        } else {
+          return Scaffold(
+            body: DetailSkeleton(
+              pictureId: pictureId,
+            ),
+          );
+        }
+      },
     );
   }
 }
 
-class BackButton extends StatelessWidget {
-  const BackButton({
-    Key? key,
-  }) : super(key: key);
+class DetailSkeleton extends StatelessWidget {
+  final String pictureId;
+  const DetailSkeleton({required this.pictureId, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 12,
-      left: 12,
-      child: SafeArea(
-        child: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Container(
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(32)),
-                color: Color(0x80000000)),
-            child: const Padding(
-              padding: EdgeInsets.all(6.0),
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  DetailBackgroundImage(pictureId: pictureId),
+                  const DetailBackgroundGradient(),
+                  Positioned(
+                    bottom: 24,
+                    left: 24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Skeleton(
+                          height: 24,
+                          width: 96,
+                          isTransparent: true,
+                        ),
+                        SizedBox(height: 4),
+                        Skeleton(
+                          height: 19,
+                          width: 64,
+                          isTransparent: true,
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
-            ),
+              const SizedBox(
+                height: 24,
+              ),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(24, 0, 0, 0),
+                child: Skeleton(height: 18, width: 128),
+              ),
+              const SizedBox(height: 12),
+              const Padding(
+                padding: EdgeInsets.only(left: 24),
+                child: Skeleton(height: 32, width: 64),
+              ),
+              const SizedBox(height: 6),
+              const Padding(
+                padding: EdgeInsets.only(left: 24),
+                child: Skeleton(height: 32, width: 64),
+              ),
+              const SizedBox(
+                height: 28,
+              ),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(24, 12, 18, 12),
+                child: Skeleton(height: 18, width: 148),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Padding(
+                  padding: EdgeInsets.fromLTRB(24, 0, 0, 0),
+                  child: Skeleton(height: 18, width: 128)),
+            ],
           ),
         ),
-      ),
+        const FloatingBackButton(),
+      ],
+    );
+  }
+}
+
+class DetailContent extends StatelessWidget {
+  const DetailContent({
+    Key? key,
+    required this.restaurant,
+  }) : super(key: key);
+
+  final Restaurant restaurant;
+
+  @override
+  Widget build(BuildContext context) {
+    final restaurantId = restaurant.id;
+    List<Widget> renderMenuChips(Restaurant restaurant, String menuType) {
+      List<Widget> foodsDrinks = [];
+
+      var foods = restaurant.menus['foods'];
+      var drinks = restaurant.menus['drinks'];
+
+      if (menuType == 'food') {
+        for (Map food in foods) {
+          foodsDrinks.add(MenuMiniCard(
+            chipText: food['name'],
+          ));
+        }
+      }
+
+      if (menuType == 'drink') {
+        for (Map drink in drinks) {
+          foodsDrinks.add(MenuMiniCard(
+            chipText: drink['name'],
+          ));
+        }
+      }
+
+      return foodsDrinks;
+    }
+
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  DetailBackgroundImage(pictureId: restaurant.pictureId),
+                  const DetailBackgroundGradient(),
+                  DetailTitles(restaurant: restaurant)
+                ],
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
+                child: Text(
+                  'FOODS AND DRINKS',
+                  style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF062006),
+                      ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 24,
+                    ),
+                    ...renderMenuChips(restaurant, 'drink')
+                  ],
+                ),
+              ),
+              const SizedBox(height: 6),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 24,
+                    ),
+                    ...renderMenuChips(restaurant, 'food')
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              DetailDescription(restaurant: restaurant),
+              Reviews(restaurantId: restaurantId),
+              const SizedBox(
+                height: 12,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
+                child: Text(
+                  'MORE RESTAURANTS',
+                  style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF062006),
+                      ),
+                ),
+              ),
+              FutureBuilder(
+                future: Restaurant.getRestaurantsFromAPI(),
+                builder: (context, snapshot) {
+                  return MoreRestaurantList(
+                      snapshot: snapshot, currentRestaurant: restaurant);
+                },
+              )
+            ],
+          ),
+        ),
+        const FloatingBackButton(),
+      ],
     );
   }
 }

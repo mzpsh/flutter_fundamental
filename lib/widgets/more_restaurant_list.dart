@@ -40,7 +40,6 @@ class _MoreRestaurantListState extends State<MoreRestaurantList> {
         restaurantWidgets.add(RestaurantItem(
           index: i,
           restaurant: _filteredData[i],
-          isHeroed: false,
         ));
       }
 

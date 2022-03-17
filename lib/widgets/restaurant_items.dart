@@ -5,21 +5,23 @@ import 'package:flutter_fundamental/widgets/skeleton.dart';
 class RestaurantItem extends StatelessWidget {
   final int index;
   final Restaurant restaurant;
-  final bool isHeroed;
 
-  const RestaurantItem(
-      {Key? key,
-      required this.index,
-      required this.restaurant,
-      required this.isHeroed})
-      : super(key: key);
+  const RestaurantItem({
+    Key? key,
+    required this.index,
+    required this.restaurant,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: index == 0
+          ? const BorderRadius.only(
+              topLeft: Radius.circular(16), topRight: Radius.circular(16))
+          : BorderRadius.zero,
       onTap: () => Navigator.pushNamed(context, 'detail', arguments: {
-        'restaurant': restaurant,
-        'index': index,
+        "pictureId": restaurant.pictureId,
+        "restaurantId": restaurant.id,
       }),
       child: Ink(
         padding: index == 0
@@ -28,7 +30,7 @@ class RestaurantItem extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: index == 0
               ? const BorderRadius.only(
-                  topLeft: Radius.circular(32), topRight: Radius.circular(32))
+                  topLeft: Radius.circular(16), topRight: Radius.circular(16))
               : BorderRadius.zero,
           color: Colors.white,
         ),
@@ -43,14 +45,7 @@ class RestaurantItem extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),
-                child: isHeroed
-                    ? Hero(
-                        tag: 'image$index',
-                        child: RestaurantItemImage(
-                          restaurant: restaurant,
-                        ),
-                      )
-                    : RestaurantItemImage(restaurant: restaurant),
+                child: RestaurantItemImage(restaurant: restaurant),
               ),
               Expanded(
                 child: Row(
@@ -129,15 +124,19 @@ class RestaurantItemImage extends StatelessWidget {
         height: 64,
         width: 72,
         decoration: BoxDecoration(
-            boxShadow: const [
-              BoxShadow(
-                  color: Color.fromARGB(40, 0, 0, 0),
-                  blurRadius: 8,
-                  offset: Offset(0, 4))
-            ],
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-            image: DecorationImage(
-                fit: BoxFit.cover, image: NetworkImage(restaurant.pictureId))),
+          boxShadow: const [
+            BoxShadow(
+                color: Color.fromARGB(40, 0, 0, 0),
+                blurRadius: 8,
+                offset: Offset(0, 4))
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(
+                'https://restaurant-api.dicoding.dev/images/medium/${restaurant.pictureId}'),
+          ),
+        ),
       ),
     );
   }
@@ -158,7 +157,7 @@ class RestaurantItemSkeleton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: index == 0
             ? const BorderRadius.only(
-                topLeft: Radius.circular(32), topRight: Radius.circular(32))
+                topLeft: Radius.circular(16), topRight: Radius.circular(16))
             : BorderRadius.zero,
         color: Colors.white,
       ),

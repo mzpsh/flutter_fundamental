@@ -1,0 +1,27 @@
+Performance in general suck, especially in detail
+  Replace everything with listviewbuilder in detail
+
+DONE
+Relayout home page for subsequent buttons.
+Add categories cuicine buttons:
+  jawa, italia, modern, spanyol
+Make a chip-like component for detail page.
+Implement restaurant model with optionals:
+  menu
+  categories
+Implement a getList method for restaurant model
+Connect restaurant model to home page
+Implement ListView.builder so it didn't lag
+Make two widget of expandable description into one widget
+Implement the skeleton, but keep the same image link so the hero didn't suck.
+Implement getDetail with id parameter, use simple loading indicator first
+The more restaurant basically just getlist, but like usual offline json equivalent filter.
+Show categories
+Build Collapsible review
+Cuisine menu push to search page with the cuisine text as argument.
+Food menu push to search page too
+Make sure the search page with init and onChanged calling the api
+  Just use simple loading indicator first, also error throwup.
+Make a getx controller for adding and checking if restaurantis in favorite.
+listview build the favorite restaurant
+Add review feature
