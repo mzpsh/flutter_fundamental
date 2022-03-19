@@ -39,49 +39,51 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-          title: TextField(
-            onChanged: (input) {
-              if (_searchFieldController.text.isEmpty) {
-                _isSearching = false;
-              } else {
-                _isSearching = true;
-              }
+      resizeToAvoidBottomInset: false, // Bottom overflow fix
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        title: TextField(
+          onChanged: (input) {
+            if (_searchFieldController.text.isEmpty) {
+              _isSearching = false;
+            } else {
+              _isSearching = true;
+            }
 
-              setState(() {});
-            },
-            autofocus: true,
-            controller: _searchFieldController,
-            decoration: InputDecoration(
-              suffixIcon: _isSearching
-                  ? IconButton(
-                      onPressed: () => _clearSearchTerm(),
-                      icon: const Icon(Icons.clear),
-                    )
-                  : const SizedBox.shrink(),
-              border: InputBorder.none,
-              hintText: 'Find restaurants..',
-            ),
+            setState(() {});
+          },
+          autofocus: true,
+          controller: _searchFieldController,
+          decoration: InputDecoration(
+            suffixIcon: _isSearching
+                ? IconButton(
+                    onPressed: () => _clearSearchTerm(),
+                    icon: const Icon(Icons.clear),
+                  )
+                : const SizedBox.shrink(),
+            border: InputBorder.none,
+            hintText: 'Find restaurants..',
           ),
         ),
-        body: _isSearching
-            ? FutureBuilder(
-                future: Restaurant.findRestaurantsFromAPI(
-                    searchTerm: _searchFieldController.text),
-                builder: (context, snapshot) =>
-                    RestaurantList(snapshot: snapshot, isSearching: true))
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Text(
-                      'Enter search term.',
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
+      ),
+      body: _isSearching
+          ? FutureBuilder(
+              future: Restaurant.findRestaurantsFromAPI(
+                  searchTerm: _searchFieldController.text),
+              builder: (context, snapshot) =>
+                  RestaurantList(snapshot: snapshot, isSearching: true))
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Text(
+                    'Enter search term.',
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
-                ],
-              ));
+                ),
+              ],
+            ),
+    );
   }
 }
