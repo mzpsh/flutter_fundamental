@@ -13,12 +13,12 @@ class DailyNotification {
   static tz.TZDateTime _nextElevenAM() {
     tz.initializeTimeZones();
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime tenAm =
+    tz.TZDateTime elevenAm =
         tz.TZDateTime(tz.local, now.year, now.month, now.day, 11);
-    if (tenAm.isBefore(now)) {
-      tenAm = tenAm.add(const Duration(days: 1));
+    if (elevenAm.isBefore(now)) {
+      elevenAm = elevenAm.add(const Duration(days: 1));
     }
-    return tenAm;
+    return elevenAm;
   }
 
   static Future<bool> switchNotification(
