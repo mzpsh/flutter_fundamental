@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fundamental/controllers/favorites.dart';
 import 'package:flutter_fundamental/models/restaurant.dart';
+import 'package:flutter_fundamental/utils/restaurant_getter.dart';
 import 'package:flutter_fundamental/widgets/detail_background_gradient.dart';
 import 'package:flutter_fundamental/widgets/detail_background_image.dart';
 import 'package:flutter_fundamental/widgets/detail_description.dart';
@@ -28,7 +29,7 @@ class _DetailState extends State<Detail> {
     final restaurantId = arguments['restaurantId'];
 
     return FutureBuilder(
-      future: Restaurant.getRestaurantDetailFromAPI(restaurantId),
+      future: RestaurantGetter.getRestaurantDetailFromAPI(restaurantId),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Scaffold(
@@ -264,7 +265,7 @@ class DetailContent extends StatelessWidget {
                 ),
               ),
               FutureBuilder(
-                future: Restaurant.getRestaurantsFromAPI(),
+                future: RestaurantGetter.getRestaurantsFromAPI(),
                 builder: (context, snapshot) {
                   return MoreRestaurantList(
                       snapshot: snapshot, currentRestaurant: restaurant);

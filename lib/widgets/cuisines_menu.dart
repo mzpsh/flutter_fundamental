@@ -89,7 +89,10 @@ class CuisinesMenuSkeleton extends StatelessWidget {
         color: Colors.transparent,
         elevation: 0,
         borderRadius: const BorderRadius.all(Radius.circular(4)),
-        // ignore: sized_box_for_whitespace
+
+        /// Container is needed for consistency
+        /// with real(non-skeleton) widget.
+        /// ignore: sized_box_for_whitespace
         child: Container(
           height: 80,
           width: 80,

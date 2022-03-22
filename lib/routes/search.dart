@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_fundamental/models/restaurant.dart';
+import 'package:flutter_fundamental/utils/restaurant_getter.dart';
 import 'package:flutter_fundamental/widgets/restaurant_list.dart';
 
 class Search extends StatefulWidget {
@@ -68,7 +68,7 @@ class _SearchState extends State<Search> {
       ),
       body: _isSearching
           ? FutureBuilder(
-              future: Restaurant.findRestaurantsFromAPI(
+              future: RestaurantGetter.findRestaurantsFromAPI(
                   searchTerm: _searchFieldController.text),
               builder: (context, snapshot) =>
                   RestaurantList(snapshot: snapshot, isSearching: true))

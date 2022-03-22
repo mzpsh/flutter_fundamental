@@ -1,5 +1,4 @@
-Performance in general suck, especially in detail
-  Replace everything with listviewbuilder in detail
+Add testing for json and api methods.
 
 DONE
 Relayout home page for subsequent buttons.
@@ -25,3 +24,9 @@ Make sure the search page with init and onChanged calling the api
 Make a getx controller for adding and checking if restaurantis in favorite.
 listview build the favorite restaurant
 Add review feature
+
+Random restaurant notification at 10 am:
+  local notification: IM CHOOSING THIS.
+    when flicking the switch, get all restaurant list
+    choose one, get the title, id and catefories.
+    and use that as a parameter for next notification.

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_fundamental/models/restaurant.dart';
+import 'package:flutter_fundamental/utils/restaurant_getter.dart';
 import 'package:http/http.dart' as http;
 
 class Reviews extends StatefulWidget {
@@ -92,8 +93,8 @@ class _ReviewsState extends State<Reviews> {
         ),
         (_isReviewsOpen
             ? FutureBuilder(
-                future:
-                    Restaurant.getRestaurantDetailFromAPI(widget.restaurantId),
+                future: RestaurantGetter.getRestaurantDetailFromAPI(
+                    widget.restaurantId),
                 builder: (context, snapshot) {
                   Widget renderAddReviewDialog() {
                     return Form(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fundamental/controllers/favorites.dart';
-import 'package:flutter_fundamental/models/restaurant.dart';
+import 'package:flutter_fundamental/utils/daily_notification.dart';
+import 'package:flutter_fundamental/utils/restaurant_getter.dart';
 import 'package:flutter_fundamental/widgets/restaurant_items.dart';
 import 'package:flutter_fundamental/widgets/restaurant_list.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final FavoriteRestaurants c = Get.find();
   int _tabIndex = 0;
 
   void _setTabIndex(int index) {
@@ -28,30 +28,8 @@ class _HomeState extends State<Home> {
       body: _tabIndex == 0
           ? const RestaurantTab()
           : _tabIndex == 1
-              ? Scaffold(
-                  appBar: AppBar(
-                    title: const Text('Favorite Restaurants'),
-                  ),
-                  body: Obx(() {
-                    final restaurants = c.favoriteRestaurants;
-                    if (restaurants.isEmpty) {
-                      return const Center(
-                        child: Text("There's no favorite restaurant."),
-                      );
-                    } else {
-                      return ListView.builder(
-                        itemCount: restaurants.length,
-                        itemBuilder: ((context, index) => RestaurantItem(
-                              index: index,
-                              restaurant: restaurants[index],
-                            )),
-                      );
-                    }
-                  }),
-                )
-              : const Center(
-                  child: Text('Not yet implemented.'),
-                ),
+              ? FavoriteTab()
+              : const SettingsTab(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _tabIndex,
         onTap: _setTabIndex,
@@ -66,10 +44,106 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.more_horiz_outlined),
-            label: 'More',
+            label: 'Settings',
           ),
         ],
       ),
+    );
+  }
+}
+
+class SettingsTab extends StatelessWidget {
+  const SettingsTab({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
+      body: const ReminderSwitch(),
+    );
+  }
+}
+
+class ReminderSwitch extends StatefulWidget {
+  const ReminderSwitch({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<ReminderSwitch> createState() => _ReminderSwitchState();
+}
+
+class _ReminderSwitchState extends State<ReminderSwitch> {
+  bool _isActive = false;
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        _isLoading = true;
+        setState(() {});
+        var status =
+            await DailyNotification.switchNotification(context, !_isActive);
+        _isLoading = false;
+        _isActive = status;
+        setState(() {});
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Daily restaurant reminder',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            _isLoading
+                ? const Padding(
+                    padding: EdgeInsets.all(6.0),
+                    child: CircularProgressIndicator(),
+                  )
+                : Switch(
+                    activeColor: const Color.fromARGB(255, 21, 112, 21),
+                    value: _isActive,
+                    onChanged: (value) {},
+                  )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FavoriteTab extends StatelessWidget {
+  final FavoriteRestaurants c = Get.find();
+
+  FavoriteTab({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Favorite Restaurants'),
+      ),
+      body: Obx(() {
+        final restaurants = c.favoriteRestaurants;
+        if (restaurants.isEmpty) {
+          return const Center(
+            child: Text("There's no favorite restaurant."),
+          );
+        } else {
+          return ListView.builder(
+            itemCount: restaurants.length,
+            itemBuilder: ((context, index) => RestaurantItem(
+                  index: index,
+                  restaurant: restaurants[index],
+                )),
+          );
+        }
+      }),
     );
   }
 }
@@ -99,7 +173,7 @@ class RestaurantTab extends StatelessWidget {
         ),
         SafeArea(
           child: FutureBuilder(
-            future: Restaurant.getRestaurantsFromAPI(),
+            future: RestaurantGetter.getRestaurantsFromAPI(),
             builder: (context, snapshot) {
               return RestaurantList(snapshot: snapshot);
             },

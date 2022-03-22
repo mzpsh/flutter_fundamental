@@ -28,6 +28,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   # google_fonts:
+  flutter_local_notifications:
+  flutter_native_timezone:
   http:
   get:
   flutter:
@@ -39,6 +41,9 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
+  test:
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
 

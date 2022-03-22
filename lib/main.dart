@@ -29,8 +29,6 @@ class App extends StatelessWidget {
         'detail': (context) => const Detail(),
       },
       theme: ThemeData(
-        // This doesn't seems to work very well
-        // need to study material's theming
         colorScheme: const ColorScheme(
             brightness: Brightness.light,
             primary: Color(0xFF062006),

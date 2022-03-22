@@ -1,9 +1,6 @@
 import 'package:flutter_fundamental/models/restaurant.dart';
 import 'package:get/get.dart';
 
-// Hope the dicoding reviewer count this as
-// a proper state management :wink:  :wink:
-// this is criminally underrated lol.
 class FavoriteRestaurants extends GetxController {
   var favoriteRestaurants = <Restaurant>[].obs;
 
