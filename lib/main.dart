@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_fundamental/controllers/favorites.dart';
+import 'package:flutter_fundamental/controllers/favorites_controller.dart';
+import 'package:flutter_fundamental/controllers/reviews_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_fundamental/routes/detail.dart';
 import 'package:flutter_fundamental/routes/home.dart';
@@ -15,7 +16,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(FavoriteRestaurants());
+    Get.put(FavoritesController());
+    Get.put(ReviewsController());
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,

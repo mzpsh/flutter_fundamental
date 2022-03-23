@@ -1,7 +1,7 @@
 import 'package:flutter_fundamental/models/restaurant.dart';
 import 'package:get/get.dart';
 
-class FavoriteRestaurants extends GetxController {
+class FavoritesController extends GetxController {
   var favoriteRestaurants = <Restaurant>[].obs;
 
   bool checkIfRestaurantHasBeenFavorited(Restaurant restaurant) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fundamental/controllers/favorites.dart';
+import 'package:flutter_fundamental/controllers/favorites_controller.dart';
 import 'package:flutter_fundamental/utils/daily_notification.dart';
 import 'package:flutter_fundamental/utils/restaurant_getter.dart';
 import 'package:flutter_fundamental/widgets/restaurant_items.dart';
@@ -81,16 +81,18 @@ class _ReminderSwitchState extends State<ReminderSwitch> {
 
   @override
   Widget build(BuildContext context) {
+    void toggle() async {
+      _isLoading = true;
+      setState(() {});
+      var status =
+          await DailyNotification.switchNotification(context, !_isActive);
+      _isLoading = false;
+      _isActive = status;
+      setState(() {});
+    }
+
     return InkWell(
-      onTap: () async {
-        _isLoading = true;
-        setState(() {});
-        var status =
-            await DailyNotification.switchNotification(context, !_isActive);
-        _isLoading = false;
-        _isActive = status;
-        setState(() {});
-      },
+      onTap: toggle,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Row(
@@ -108,7 +110,9 @@ class _ReminderSwitchState extends State<ReminderSwitch> {
                 : Switch(
                     activeColor: const Color.fromARGB(255, 21, 112, 21),
                     value: _isActive,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      toggle();
+                    },
                   )
           ],
         ),
@@ -118,7 +122,7 @@ class _ReminderSwitchState extends State<ReminderSwitch> {
 }
 
 class FavoriteTab extends StatelessWidget {
-  final FavoriteRestaurants c = Get.find();
+  final FavoritesController c = Get.find();
 
   FavoriteTab({Key? key}) : super(key: key);
 

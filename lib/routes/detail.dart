@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fundamental/controllers/favorites.dart';
+import 'package:flutter_fundamental/controllers/favorites_controller.dart';
 import 'package:flutter_fundamental/models/restaurant.dart';
 import 'package:flutter_fundamental/utils/restaurant_getter.dart';
 import 'package:flutter_fundamental/widgets/detail_background_gradient.dart';
@@ -21,7 +21,7 @@ class Detail extends StatefulWidget {
 }
 
 class _DetailState extends State<Detail> {
-  final FavoriteRestaurants c = Get.find();
+  final FavoritesController c = Get.find();
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;

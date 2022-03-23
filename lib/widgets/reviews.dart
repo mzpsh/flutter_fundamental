@@ -1,9 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_fundamental/models/restaurant.dart';
 import 'package:flutter_fundamental/utils/restaurant_getter.dart';
+import 'package:flutter_fundamental/controllers/reviews_controller.dart';
 import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
 
 class Reviews extends StatefulWidget {
   final String restaurantId;
@@ -14,7 +15,7 @@ class Reviews extends StatefulWidget {
 }
 
 class _ReviewsState extends State<Reviews> {
-  bool _isReviewsOpen = false;
+  final ReviewsController c = Get.find();
   final _formKey = GlobalKey<FormState>();
   final _nameTextController = TextEditingController();
   final _reviewTextController = TextEditingController();
@@ -72,7 +73,7 @@ class _ReviewsState extends State<Reviews> {
         InkWell(
           onTap: () {
             setState(() {
-              _isReviewsOpen = !_isReviewsOpen;
+              c.toggleReview();
             });
           },
           child: Padding(
@@ -87,12 +88,16 @@ class _ReviewsState extends State<Reviews> {
                           color: const Color(0xFF062006),
                         ),
                   ),
-                  Icon(_isReviewsOpen ? Icons.expand_less : Icons.expand_more)
+                  Obx(() => Icon(c.isReviewsOpen.value
+                      ? Icons.expand_less
+                      : Icons.expand_more))
                 ],
               )),
         ),
-        (_isReviewsOpen
-            ? FutureBuilder(
+        Obx(
+          () {
+            if (c.isReviewsOpen.value) {
+              return FutureBuilder(
                 future: RestaurantGetter.getRestaurantDetailFromAPI(
                     widget.restaurantId),
                 builder: (context, snapshot) {
@@ -226,8 +231,12 @@ class _ReviewsState extends State<Reviews> {
                     );
                   }
                 },
-              )
-            : const SizedBox.shrink())
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
+        )
       ],
     );
   }
