@@ -3,6 +3,7 @@ import 'package:flutter_fundamental/utils/restaurant_getter.dart';
 import '../models/restaurant.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 
@@ -10,14 +11,19 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 class DailyNotification {
-  static tz.TZDateTime _nextElevenAM() {
+  static Future<tz.TZDateTime> nextElevenAM() async {
     tz.initializeTimeZones();
+    final String? timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(timeZoneName!));
+
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+
     tz.TZDateTime elevenAm =
         tz.TZDateTime(tz.local, now.year, now.month, now.day, 11);
     if (elevenAm.isBefore(now)) {
       elevenAm = elevenAm.add(const Duration(days: 1));
     }
+
     return elevenAm;
   }
 
@@ -39,7 +45,7 @@ class DailyNotification {
           0,
           'Restaurant reminder',
           selectedRandomRestaurant.name,
-          _nextElevenAM(),
+          await nextElevenAM(),
           const NotificationDetails(
             android: AndroidNotificationDetails(
                 '1', 'daily_restaurant_reminder_1',
@@ -82,27 +88,5 @@ class NotificationHelper {
             arguments: {'pictureId': pictureId, 'restaurantId': restaurantId});
       },
     );
-
-// await flutterLocalNotificationsPlugin.zonedSchedule(
-//         0,
-//         'daily scheduled notification title',
-//         'daily scheduled notification body',
-//         _nextInstanceOfTenAM(),
-//         const NotificationDetails(
-//           android: AndroidNotificationDetails('daily notification channel id',
-//               'daily notification channel name',
-//               channelDescription: 'daily notification description'),
-//         ),
-//         androidAllowWhileIdle: true,
-//         uiLocalNotificationDateInterpretation:
-//             UILocalNotificationDateInterpretation.absoluteTime,
-//         matchDateTimeComponents: DateTimeComponents.time);
-
-    // final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    // tz.TZDateTime tenAm =
-    //     tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
-    // if (tenAm.isBefore(now)) {
-    //   tenAm = tenAm.add(const Duration(days: 1));
-    // }
   }
 }
