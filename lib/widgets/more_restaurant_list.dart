@@ -1,6 +1,6 @@
+import '../models/restaurant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fundamental/widgets/restaurant_items.dart';
-import '../models/restaurant.dart';
 
 class MoreRestaurantList extends StatefulWidget {
   final Restaurant currentRestaurant;

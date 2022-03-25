@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_fundamental/controllers/favorites_controller.dart';
-import 'package:flutter_fundamental/utils/daily_notification.dart';
-import 'package:flutter_fundamental/utils/restaurant_getter.dart';
-import 'package:flutter_fundamental/widgets/restaurant_items.dart';
-import 'package:flutter_fundamental/widgets/restaurant_list.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_fundamental/widgets/restaurant_list.dart';
+import 'package:flutter_fundamental/utils/restaurant_getter.dart';
+import 'package:flutter_fundamental/utils/daily_notification.dart';
+import 'package:flutter_fundamental/widgets/restaurant_items.dart';
+import 'package:flutter_fundamental/controllers/favorites_controller.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

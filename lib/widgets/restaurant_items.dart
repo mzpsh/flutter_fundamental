@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fundamental/models/restaurant.dart';
 import 'package:flutter_fundamental/widgets/skeleton.dart';
+import 'package:flutter_fundamental/models/restaurant.dart';
 
 class RestaurantItem extends StatelessWidget {
   final int index;

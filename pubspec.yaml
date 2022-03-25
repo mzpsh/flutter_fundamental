@@ -26,12 +26,14 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
-dependencies:
-  # google_fonts:
-  flutter_local_notifications:
-  flutter_native_timezone:
-  http:
+dependencies:  
   get:
+  http:
+  path:
+  sembast: 
+  path_provider:
+  flutter_native_timezone:
+  flutter_local_notifications:
   flutter:
     sdk: flutter
 

@@ -1,17 +1,17 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_fundamental/controllers/favorites_controller.dart';
-import 'package:flutter_fundamental/models/restaurant.dart';
-import 'package:flutter_fundamental/utils/restaurant_getter.dart';
-import 'package:flutter_fundamental/widgets/detail_background_gradient.dart';
-import 'package:flutter_fundamental/widgets/detail_background_image.dart';
-import 'package:flutter_fundamental/widgets/detail_description.dart';
-import 'package:flutter_fundamental/widgets/detail_menu_mini_card.dart';
-import 'package:flutter_fundamental/widgets/detail_titles.dart';
-import 'package:flutter_fundamental/widgets/floating_back_button.dart';
+import '../widgets/more_restaurant_list.dart';
 import 'package:flutter_fundamental/widgets/reviews.dart';
 import 'package:flutter_fundamental/widgets/skeleton.dart';
-import 'package:get/get.dart';
-import '../widgets/more_restaurant_list.dart';
+import 'package:flutter_fundamental/models/restaurant.dart';
+import 'package:flutter_fundamental/widgets/detail_titles.dart';
+import 'package:flutter_fundamental/utils/restaurant_getter.dart';
+import 'package:flutter_fundamental/widgets/detail_description.dart';
+import 'package:flutter_fundamental/widgets/floating_back_button.dart';
+import 'package:flutter_fundamental/widgets/detail_menu_mini_card.dart';
+import 'package:flutter_fundamental/widgets/detail_background_image.dart';
+import 'package:flutter_fundamental/controllers/favorites_controller.dart';
+import 'package:flutter_fundamental/widgets/detail_background_gradient.dart';
 
 class Detail extends StatefulWidget {
   const Detail({Key? key}) : super(key: key);
@@ -54,10 +54,10 @@ class _DetailState extends State<Detail> {
           return Scaffold(
             floatingActionButton: FloatingActionButton(
               backgroundColor: const Color(0xFFf3bc58),
-              onPressed: () {
+              onPressed: () async {
                 final message = c.toggleRestaurantToFavorite(restaurant);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(message),
+                  content: Text(await message),
                   duration: const Duration(seconds: 1),
                 ));
               },

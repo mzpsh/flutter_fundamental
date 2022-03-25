@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 import '../models/restaurant.dart';
+import 'package:flutter/material.dart';
 
 class DetailDescription extends StatefulWidget {
   final Restaurant restaurant;

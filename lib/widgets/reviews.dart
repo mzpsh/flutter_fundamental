@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_fundamental/models/restaurant.dart';
 import 'package:flutter_fundamental/utils/restaurant_getter.dart';
 import 'package:flutter_fundamental/controllers/reviews_controller.dart';
-import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 
 class Reviews extends StatefulWidget {
   final String restaurantId;

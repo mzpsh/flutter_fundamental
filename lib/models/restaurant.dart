@@ -18,6 +18,24 @@ class Restaurant {
     this.customerReviews = const [],
   });
 
+  static String getJsonFromRestaurants(List<Restaurant> restaurants) {
+    String jsonData = '{"restaurants":[';
+    for (int i = 0; i < restaurants.length; i++) {
+      final restaurant = restaurants[i];
+      jsonData += '{"id": "${restaurant.id}",';
+      jsonData += '"name": "${restaurant.name}",';
+      jsonData += '"description": "${restaurant.description}",';
+      jsonData += '"pictureId": "${restaurant.pictureId}",';
+      jsonData += '"city": "${restaurant.city}",';
+      jsonData += '"rating": ${restaurant.rating}}';
+      if (restaurants.length > 1 && !(i == restaurants.length - 1)) {
+        jsonData += ',';
+      }
+    }
+    jsonData += "]}";
+    return jsonData;
+  }
+
   static List<Restaurant> getRestaurantsFromJson(String jsonData) {
     final data = jsonDecode(jsonData);
     final List restaurantsData = data["restaurants"];

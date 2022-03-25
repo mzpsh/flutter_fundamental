@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fundamental/widgets/cuisines_menu.dart';
-import 'package:flutter_fundamental/widgets/home_top_bar.dart';
-import 'package:flutter_fundamental/widgets/restaurant_items.dart';
 import 'package:flutter_fundamental/widgets/skeleton.dart';
+import 'package:flutter_fundamental/widgets/home_top_bar.dart';
+import 'package:flutter_fundamental/widgets/cuisines_menu.dart';
+import 'package:flutter_fundamental/widgets/restaurant_items.dart';
 
 class RestaurantList extends StatefulWidget {
   final AsyncSnapshot<Object?> snapshot;
