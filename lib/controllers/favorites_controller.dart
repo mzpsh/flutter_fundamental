@@ -27,8 +27,17 @@ class FavoritesController extends GetxController {
     super.onInit();
     var db = await DatabaseHelper.getDatabase();
     var favoriteRecord = StoreRef.main().record('favorites');
-    favoriteRestaurants.addAll(
-        Restaurant.getRestaurantsFromJson(await favoriteRecord.get(db)));
+    var currentFavorites = await favoriteRecord.get(db);
+
+    /// This is for rejected submission 1076113.
+    /// Current database null checking.
+    /// Don't retrieve and refresh the state
+    /// if the database it empty.
+    if (currentFavorites != null) {
+      favoriteRestaurants.addAll(
+        Restaurant.getRestaurantsFromJson(currentFavorites),
+      );
+    }
 
     ever(favoriteRestaurants, (List<Restaurant> restaurants) async {
       final jsonData = Restaurant.getJsonFromRestaurants(restaurants);
