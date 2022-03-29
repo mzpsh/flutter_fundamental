@@ -1,5 +1,5 @@
 # Screenshots
 
-!['screenshot1'](screenshot1.png)
-!['screenshot2'](screenshot2.png)
-!['screenshot3'](screenshot3.png)
+<img src="screenshot1.png" alt="screenshot1.png" width="200"/>
+<img src="screenshot2.png" alt="screenshot2.png" width="200"/>
+<img src="screenshot3.png" alt="screenshot3.png" width="200"/>
